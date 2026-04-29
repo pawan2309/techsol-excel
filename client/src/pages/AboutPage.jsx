@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Send, MapPin, Users, Target, Shield } from 'lucide-react';
+import Seo from '../components/seo/Seo';
 
 const AboutPage = () => {
   useEffect(() => {
@@ -14,8 +15,14 @@ const AboutPage = () => {
   ];
 
   return (
-    <div style={{ background: '#131313', minHeight: '100vh', color: '#e5e2e1', paddingTop: '140px', paddingBottom: '100px' }}>
-      <div className="container">
+    <>
+      <Seo
+        title="About Techsol | Engineering and Leadership Team"
+        description="Learn about Techsol's mission, leadership team, and approach to building enterprise-grade digital ecosystems from Gurugram, India."
+        path="/about"
+      />
+      <div style={{ background: '#131313', minHeight: '100vh', color: '#e5e2e1', paddingTop: '140px', paddingBottom: '100px' }}>
+        <div className="container">
 
         {/* Header Section */}
         <div style={{ maxWidth: '800px', marginBottom: '6rem' }}>
@@ -118,8 +125,9 @@ const AboutPage = () => {
           </motion.div>
         </div>
 
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

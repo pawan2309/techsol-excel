@@ -17,10 +17,14 @@ const Navbar = () => {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-      className="glass"
       style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-        padding: '0.8rem 0', pointerEvents: 'auto'
+        padding: '0.8rem 0',
+        pointerEvents: 'auto',
+        background: 'rgba(10, 10, 11, 0.55)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        borderBottom: '1px solid rgba(255,255,255,0.08)'
       }}
     >
       <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -43,7 +47,13 @@ const Navbar = () => {
             Home
           </Link>
           <Link
-            to="/services"
+            to={isHome ? "#services" : "/#services"}
+            onClick={(e) => {
+              if (isHome) {
+                e.preventDefault();
+                document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
             style={{
               color: isServices ? '#00f2ff' : 'inherit',
               textDecoration: 'none',
@@ -63,7 +73,13 @@ const Navbar = () => {
             About
           </Link>
           <Link
-            to="/contact"
+            to={isHome ? "#contact" : "/#contact"}
+            onClick={(e) => {
+              if (isHome) {
+                e.preventDefault();
+                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
             className="btn btn-primary"
             style={{
               padding: '0.5rem 1.5rem',
@@ -114,9 +130,21 @@ const Navbar = () => {
             }}
           >
             <Link to="/" onClick={() => setIsMobileMenuOpen(false)} style={{ fontSize: '2rem', color: isHome ? '#00f2ff' : 'white', textDecoration: 'none' }}>Home</Link>
-            <Link to="/services" onClick={() => setIsMobileMenuOpen(false)} style={{ fontSize: '2rem', color: isServices ? '#00f2ff' : 'white', textDecoration: 'none' }}>Services</Link>
+            <Link to={isHome ? "#services" : "/#services"} onClick={(e) => {
+              setIsMobileMenuOpen(false);
+              if (isHome) {
+                e.preventDefault();
+                document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
+              }
+            }} style={{ fontSize: '2rem', color: isServices ? '#00f2ff' : 'white', textDecoration: 'none' }}>Services</Link>
             <Link to="/about" onClick={() => setIsMobileMenuOpen(false)} style={{ fontSize: '2rem', color: isAbout ? '#00f2ff' : 'white', textDecoration: 'none' }}>About</Link>
-            <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)} className="btn btn-primary" style={{ fontSize: '1.5rem', padding: '1rem 3rem' }}>Contact</Link>
+            <Link to={isHome ? "#contact" : "/#contact"} onClick={(e) => {
+              setIsMobileMenuOpen(false);
+              if (isHome) {
+                e.preventDefault();
+                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+              }
+            }} className="btn btn-primary" style={{ fontSize: '1.5rem', padding: '1rem 3rem' }}>Contact</Link>
           </motion.div>
         )}
       </AnimatePresence>

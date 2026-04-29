@@ -1,14 +1,16 @@
 import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ReactLenis } from 'lenis/react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Layout, ArrowRight, Code, Shield, Activity, Database, CheckCircle } from 'lucide-react';
 import HeroOrb from '../components/canvas/HeroOrb';
 import ProcessTimeline from '../components/sections/ProcessTimeline';
 import TechStackMarquee from '../components/sections/TechStackMarquee';
+import ExpertiseGrid from '../components/sections/ExpertiseGrid';
+import ContactSection from '../components/sections/ContactSection';
 import BrandLogo from '../components/layout/BrandLogo';
+import Seo from '../components/seo/Seo';
 
 // --- Visual Components ---
 const PharmaVisual = () => (
@@ -93,27 +95,117 @@ const SportsVisual = () => (
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HomePage = () => {
+const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://techsol.me').replace(/\/$/, '');
+
+const HOME_STRUCTURED_DATA = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Techsol',
+    url: SITE_URL,
+    logo: `${SITE_URL}/favicon.svg`,
+    email: 'techsol2026@gmail.com',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Gurugram',
+      addressRegion: 'Haryana',
+      postalCode: '122001',
+      addressCountry: 'IN',
+    },
+    sameAs: ['https://t.me/techsol2026'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Techsol',
+    url: SITE_URL,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${SITE_URL}/services`,
+      'query-input': 'required name=service',
+    },
+  },
+];
+
+const HomePage = ({ onReady }) => {
   const heroRef = useRef();
+  const location = useLocation();
+  const nichesWrapperRef = useRef();
+  const nichesContainerRef = useRef();
 
   useEffect(() => {
+    if (location.hash === '#services') {
+      setTimeout(() => {
+        document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else if (location.hash === '#contact') {
+      setTimeout(() => {
+        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  }, [location]);
+
+  useEffect(() => {
+    if (onReady) onReady();
+
+    // Config for mobile stability
+    ScrollTrigger.config({ ignoreMobileResize: true });
+
+    // Refresh GSAP on resize
+    const refresh = () => ScrollTrigger.refresh();
+    window.addEventListener('resize', refresh);
+
+    const mm = gsap.matchMedia();
+
+    mm.add("(max-width: 900px)", () => {
+      const wrapper = nichesWrapperRef.current;
+      const container = nichesContainerRef.current;
+
+      if (wrapper && container) {
+        // Use a small timeout to ensure layout has settled
+        const timer = setTimeout(() => {
+          const totalScroll = container.scrollWidth - window.innerWidth;
+          
+          if (totalScroll > 0) {
+            gsap.to(container, {
+              x: -totalScroll,
+              ease: "none",
+              scrollTrigger: {
+                trigger: wrapper,
+                start: "top top",
+                end: () => `+=${totalScroll}`,
+                scrub: 1,
+                pin: true,
+                pinSpacing: true,
+                anticipatePin: 1,
+                invalidateOnRefresh: true,
+              }
+            });
+          }
+          ScrollTrigger.refresh();
+        }, 500);
+
+        return () => clearTimeout(timer);
+      }
+    });
+
     let ctx = gsap.context(() => {
       const tl = gsap.timeline();
 
-      // 1. Intro Animation (Runs once on load)
+      // Intro Animation
       tl.fromTo(".split-word",
         { opacity: 0, y: 30, rotationX: -20 },
         { opacity: 1, y: 0, rotationX: 0, duration: 1, stagger: 0.15, ease: "back.out(1.5)", delay: 0.2 }
       );
 
-      // 2. Scroll Animation (Controlled by user scroll)
+      // Hero Scroll Animation
       gsap.to(".split-word, .scroll-word", {
         scrollTrigger: {
           trigger: ".hero",
           start: "top top",
           end: "bottom top",
           scrub: true,
-          immediateRender: false // Crucial: don't capture initial opacity:0
+          immediateRender: false
         },
         opacity: 0,
         y: -100,
@@ -122,7 +214,7 @@ const HomePage = () => {
         ease: "none"
       });
 
-      // 3. Orb Fade
+      // Orb Fade
       gsap.to(".hero-orb-wrapper", {
         scrollTrigger: {
           trigger: ".hero",
@@ -134,15 +226,25 @@ const HomePage = () => {
       });
     });
 
-    return () => ctx.revert();
-  }, []);
+    return () => {
+      ctx.revert();
+      mm.revert();
+      window.removeEventListener('resize', refresh);
+    };
+  }, [onReady]);
 
   return (
-    <ReactLenis root options={{ lerp: 0.08, smoothWheel: true }}>
+    <>
+      <Seo
+        title="Techsol Digital Excellence | Web, Cloud, AI and APIs"
+        description="Techsol builds high-performance distributed systems, regulatory-grade pharma platforms, and real-time sports APIs for scale-focused teams."
+        path="/"
+        structuredData={HOME_STRUCTURED_DATA}
+      />
       <div className="app" style={{ paddingTop: '80px' }}>
         {/* Hero Section */}
-        <section className="hero" ref={heroRef} style={{ height: '100vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
-          <div className="hero-orb-wrapper" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, willChange: 'transform, opacity' }}>
+        <section className="hero" ref={heroRef} style={{ height: 'calc(100vh - 80px)', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
+          <div className="hero-orb-wrapper unzoom-orb" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, willChange: 'transform, opacity' }}>
             <HeroOrb />
           </div>
 
@@ -167,12 +269,12 @@ const HomePage = () => {
               </p>
 
               <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                <Link to="/services" className="btn btn-primary">
+                <a href="#services" onClick={(e) => { e.preventDefault(); document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }); }} className="btn btn-primary">
                   Explore Services <ArrowRight size={20} style={{ marginLeft: '0.5rem' }} />
-                </Link>
-                <Link to="/contact" className="btn" style={{ border: '1px solid rgba(255,255,255,0.3)', color: '#fff', background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(5px)' }}>
+                </a>
+                <a href="#contact" onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }} className="btn" style={{ border: '1px solid rgba(255,255,255,0.3)', color: '#fff', background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(5px)' }}>
                   Get a Free Consultation
-                </Link>
+                </a>
               </div>
             </div>
           </div>
@@ -180,47 +282,56 @@ const HomePage = () => {
 
         <TechStackMarquee />
 
-        {/* Niche Expertise: Pharma Spotlight */}
-        <section id="pharma" style={{ padding: '100px 0', background: '#0e0e0f' }}>
-          <div className="container" style={{ display: 'flex', gap: '4rem', alignItems: 'center', flexWrap: 'wrap' }}>
-            <div style={{ flex: 1, minWidth: '300px' }}>
-              <span className="badge" style={{ marginBottom: '1.5rem' }}>Core Specialization</span>
-              <h2 style={{ fontSize: '3.5rem', marginBottom: '1.5rem' }}>Regulatory <span style={{ color: '#00f2ff' }}>Pharma</span> Publishing</h2>
-              <p style={{ color: '#cfc2d9', fontSize: '1.1rem', marginBottom: '2rem', lineHeight: 1.8 }}>
-                Precision-engineered submission systems for global pharmaceutical leaders. We automate complex regulatory workflows with 99.9% compliance accuracy.
-              </p>
-              <Link to="/services" style={{ color: '#00f2ff', textDecoration: 'none', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                Launching Soon <ArrowRight size={18} />
-              </Link>
-            </div>
-            <div className="glass" style={{ flex: 1, minWidth: '300px', height: '400px', borderRadius: '1rem', border: '1px solid rgba(0, 218, 243, 0.2)', overflow: 'hidden' }}>
-              <PharmaVisual />
-            </div>
-          </div>
-        </section>
+        {/* Services Section */}
+        <ExpertiseGrid id="services" />
 
-        {/* Niche Expertise: Sports Spotlight */}
-        <section style={{ padding: '100px 0', background: '#131314' }}>
-          <div className="container" style={{ display: 'flex', gap: '4rem', alignItems: 'center', flexWrap: 'wrap-reverse' }}>
-            <div className="glass" style={{ flex: 1, minWidth: '300px', height: '400px', borderRadius: '1rem', border: '1px solid rgba(112, 0, 255, 0.2)', overflow: 'hidden' }}>
-              <SportsVisual />
-            </div>
-            <div style={{ flex: 1, minWidth: '300px' }}>
-              <span className="badge" style={{ marginBottom: '1.5rem' }}>Data Engineering</span>
-              <h2 style={{ fontSize: '3.5rem', marginBottom: '1.5rem' }}>Real-Time <span style={{ color: '#7000ff' }}>Sports</span> APIs</h2>
-              <p style={{ color: '#cfc2d9', fontSize: '1.1rem', marginBottom: '2rem', lineHeight: 1.8 }}>
-                Ultra-low latency data pipelines for real-time sports analytics. We handle millions of events per second with sub-50ms propagation.
-              </p>
-              <Link to="/services" style={{ color: '#7000ff', textDecoration: 'none', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                Contact for API <ArrowRight size={18} />
-              </Link>
-            </div>
+        {/* Niches: Horizontal Scroll on Mobile, Normal on Desktop */}
+        <div className="niches-wrapper" ref={nichesWrapperRef} style={{ position: 'relative', background: '#0e0e0f', overflow: 'hidden' }}>
+          <div className="niches-horizontal-container" ref={nichesContainerRef} style={{ display: 'flex', width: 'max-content', willChange: 'transform' }}>
+            {/* Niche Expertise: Pharma Spotlight */}
+            <section id="pharma" className="niche-section pharma-card" style={{ padding: '60px 0', flexShrink: 0 }}>
+              <div className="container niche-container">
+                <div className="niche-content">
+                  <span className="badge" style={{ marginBottom: '1rem', background: 'rgba(0, 242, 255, 0.1)', color: '#00f2ff' }}>Core Specialization</span>
+                  <h2 className="niche-title">Regulatory <span style={{ color: '#00f2ff' }}>Pharma</span> Publishing</h2>
+                  <p className="niche-text">
+                    Precision-engineered submission systems for global pharmaceutical leaders. We automate complex regulatory workflows.
+                  </p>
+                  <a href="#services" onClick={(e) => { e.preventDefault(); document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ color: '#00f2ff', textDecoration: 'none', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                    Launching Soon <ArrowRight size={18} />
+                  </a>
+                </div>
+                <div className="glass niche-visual" style={{ border: '1px solid rgba(0, 242, 255, 0.2)' }}>
+                  <PharmaVisual />
+                </div>
+              </div>
+            </section>
+
+            {/* Niche Expertise: Sports Spotlight */}
+            <section id="sports" className="niche-section sports-card" style={{ padding: '60px 0', flexShrink: 0 }}>
+              <div className="container niche-container">
+                <div className="niche-content">
+                  <span className="badge" style={{ marginBottom: '1rem', background: 'rgba(112, 0, 255, 0.1)', color: '#7000ff' }}>Data Engineering</span>
+                  <h2 className="niche-title">Real-Time <span style={{ color: '#7000ff' }}>Sports</span> APIs</h2>
+                  <p className="niche-text">
+                    Ultra-low latency data pipelines for real-time sports analytics. We handle millions of events per second.
+                  </p>
+                  <a href="#services" onClick={(e) => { e.preventDefault(); document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ color: '#7000ff', textDecoration: 'none', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                    Contact for API <ArrowRight size={18} />
+                  </a>
+                </div>
+                <div className="glass niche-visual" style={{ border: '1px solid rgba(112, 0, 255, 0.2)' }}>
+                  <SportsVisual />
+                </div>
+              </div>
+            </section>
           </div>
-        </section>
+        </div>
 
         <ProcessTimeline />
+        <ContactSection />
       </div>
-    </ReactLenis>
+    </>
   );
 };
 

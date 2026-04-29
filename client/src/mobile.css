@@ -1,0 +1,631 @@
+/* 
+  DEDICATED MOBILE & RESPONSIVE STYLES 
+  This file handles all layout adjustments for screens smaller than 1024px.
+*/
+
+/* 1. Global Overflow Protection - ONLY for mobile/tablet */
+@media (max-width: 1024px) {
+
+  html,
+  body {
+    width: 100%;
+    position: relative;
+    touch-action: pan-y;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: clip;
+    padding-top: 60px !important; /* override inline 80px to match mobile nav (~60px) */
+  }
+}
+
+/* 2. Header & Navigation Fixes */
+@media (max-width: 768px) {
+  nav {
+    padding: 0.2rem 0 !important;
+    /* Even more compact */
+  }
+
+  /* Shrink the SVG logo inside the nav */
+  nav svg {
+    height: 28px !important;
+    /* Shrunk further */
+    width: auto !important;
+  }
+
+  /* Shrink the mobile burger menu button */
+  .nav-mobile-toggle {
+    font-size: 1.2rem !important;
+    padding: 5px !important;
+  }
+
+  h1 {
+    /* Reduced minimum clamp size from 3rem to 2rem to fit long words like "Accelerating" */
+    font-size: clamp(2.2rem, 12vw, 4rem) !important;
+    line-height: 1.05 !important;
+    margin-bottom: 1rem !important;
+    /* Reduced from 2rem */
+    word-wrap: break-word;
+  }
+
+  .hero {
+    height: calc(100vh - 60px) !important; /* full viewport minus nav height */
+    min-height: -webkit-fill-available;
+    padding: 0 0 20px 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .scroll-word {
+    font-size: 1.05rem !important;
+    /* Slightly smaller for mobile */
+    margin-bottom: 1.5rem !important;
+    /* Reduced from 3rem */
+    line-height: 1.4 !important;
+  }
+
+  /* Adjust buttons for better mobile fit */
+  .hero .btn {
+    padding: 0.8rem 1.2rem !important;
+    font-size: 0.8rem !important;
+    width: 100%;
+    /* Stack buttons on very small screens */
+    justify-content: center;
+  }
+
+  .hero div[style*="display: flex"] {
+    gap: 0.8rem !important;
+    /* Tighter gap between buttons */
+  }
+
+  /* 3. Marquee Fixes */
+  section[style*="padding: 40px 0"] {
+    padding: 20px 0 !important;
+  }
+
+  .tech-badge {
+    padding: 0.6rem 1.2rem !important;
+    margin: 0 0.5rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  .tech-badge span {
+    font-size: 0.85rem !important;
+  }
+
+  .tech-badge svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .marquee-row-2 {
+    display: flex !important;
+  }
+
+  section[style*="padding: 40px 0"]>div[style*="display: flex"] {
+    gap: 8px !important;
+  }
+
+  /* 4. Our Services Header Fixes */
+  div[id="services"] {
+    padding-bottom: 0 !important;
+    /* No bottom padding - cards flow directly */
+  }
+
+  div[id="services"]>div:first-child {
+    padding: 30px 1.5rem 20px !important;
+    /* Very compact header */
+  }
+
+  div[id="services"] h1 {
+    font-size: clamp(2rem, 12vw, 3rem) !important;
+    line-height: 1 !important;
+  }
+
+  div[id="services"] p {
+    font-size: 0.9rem !important;
+    margin-top: 0.5rem !important;
+    line-height: 1.4 !important;
+  }
+}
+
+/* 5. Expertise Grid Stacking */
+@media (max-width: 900px) {
+  .service-card-wrapper {
+    height: 100vh !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    /* Card sits at top, gap goes to bottom (covered by next card) */
+    justify-content: center !important;
+    padding-top: 65px !important;
+    /* Just below the header */
+    position: sticky !important;
+    top: 0 !important;
+    /* Stick from the very top */
+  }
+
+  .service-card-container {
+    height: auto !important;
+    min-height: unset !important;
+    max-height: 75vh !important;
+    padding: 1.2rem !important;
+    width: 92vw !important;
+    border-radius: 1.5rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+  }
+
+  .service-card-inner {
+    flex-direction: column !important;
+    gap: 0.8rem !important;
+    text-align: center !important;
+    align-items: center !important;
+    height: auto !important;
+  }
+
+  .service-card-left {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    padding-bottom: 0 !important;
+    border-right: none !important;
+    border-bottom: none !important;
+    align-items: center !important;
+  }
+
+  /* The icon box — direct class target */
+  .service-icon-box {
+    width: 52px !important;
+    height: 52px !important;
+    min-width: 52px !important;
+    min-height: 52px !important;
+    margin-bottom: 0.3rem !important;
+    border-radius: 12px !important;
+  }
+
+  .service-card-left svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  /* "01 // WEB" label */
+  .service-card-left>div:last-child {
+    font-size: 0.65rem !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  .service-card-right {
+    flex: 0 0 auto !important;
+    padding-left: 0 !important;
+    width: 100% !important;
+  }
+
+  .service-card-right h2 {
+    font-size: 1.15rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.4rem !important;
+    letter-spacing: normal !important;
+  }
+
+  .service-card-right p {
+    font-size: 0.78rem !important;
+    line-height: 1.35 !important;
+    margin-bottom: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .service-card-right>div:last-child {
+    margin-top: 0.6rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  .nav-links-desktop {
+    display: none !important;
+  }
+
+  .nav-mobile-toggle {
+    display: flex !important;
+  }
+
+  /* 6. Niche Specialization Horizontal Scroll */
+  .niches-wrapper {
+    background: #0a0a0b !important;
+    height: 100vh !important;
+    /* Force full screen for pinning */
+  }
+
+  .niches-horizontal-container {
+    height: 100% !important;
+    align-items: center !important;
+  }
+
+  .niche-section {
+    height: 100vh !important;
+    width: 190vw !important;
+    /* Reduced from 200vw (20% gap reduction) */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    /* Changed from center to allow margin/padding control */
+    padding: 0 0 0 10vw !important;
+    /* Shifted cards "bit right" */
+  }
+
+  .niche-container {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 2rem !important;
+    /* Larger gap to prevent overlap */
+    padding: 1rem !important;
+    width: 150vw !important;
+    /* Even wider for more immersion */
+    height: 380px !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-radius: 2.5rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(20px) !important;
+    margin-right: 40vw !important;
+    /* Reduced from 50vw (20% gap reduction) */
+    flex-shrink: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .niche-content {
+    order: 2;
+    flex: 0 0 55% !important;
+    /* Fix width to 55% */
+    text-align: left !important;
+    z-index: 2;
+  }
+
+  .niche-title {
+    font-size: 1.8rem !important;
+    line-height: 1.1 !important;
+    margin-bottom: 0.6rem !important;
+  }
+
+  .niche-text {
+    font-size: 0.95rem !important;
+    color: #a398b0 !important;
+    margin-bottom: 1rem !important;
+    line-height: 1.4 !important;
+    max-width: 100% !important;
+  }
+
+  .niche-visual {
+    order: 1;
+    flex: 0 0 40% !important;
+    /* Fix width to 40% */
+    height: 300px !important;
+    border-radius: 1.5rem !important;
+    overflow: hidden !important;
+    z-index: 1;
+  }
+
+  .pharma-card .niche-visual {
+    border-color: rgba(0, 242, 255, 0.3) !important;
+    background: radial-gradient(circle at center, rgba(0, 242, 255, 0.05), transparent) !important;
+  }
+
+  .sports-card .niche-visual {
+    border-color: rgba(112, 0, 255, 0.3) !important;
+    background: radial-gradient(circle at center, rgba(112, 0, 255, 0.05), transparent) !important;
+  }
+}
+
+@media (min-width: 901px) {
+  .niches-horizontal-container {
+    flex-direction: column !important;
+    width: 100% !important;
+    transform: none !important;
+  }
+
+  .niche-container {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 4rem !important;
+    align-items: center !important;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .pharma-card .niche-container {
+    flex-direction: row !important;
+  }
+
+  .sports-card .niche-container {
+    flex-direction: row-reverse !important;
+  }
+
+  .niche-content {
+    flex: 1;
+  }
+
+  .niche-visual {
+    flex: 1;
+    height: 400px;
+    border-radius: 1rem;
+  }
+
+  .niche-title {
+    font-size: 3.5rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .niche-text {
+    font-size: 1.1rem !important;
+    margin-bottom: 2rem !important;
+    line-height: 1.8 !important;
+  }
+}
+
+/* ============================================================
+   7. METHODOLOGY / PROCESS TIMELINE — PURE MOBILE LAYOUT
+   Left-side vertical timeline. GSAP animated line repositioned
+   (not hidden) so scroll animation still works.
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* Section padding */
+  section:has(.process-card) {
+    padding: 60px 0 !important;
+  }
+
+  /* Heading */
+  section:has(.process-card) h2 {
+    font-size: 2rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  section:has(.process-card) > .container > div:first-child p {
+    font-size: 0.9rem !important;
+    padding: 0 1rem !important;
+    max-width: 100% !important;
+  }
+
+  /* ── Outer positioning div (holds lines + cards wrapper) ── */
+  section:has(.process-card) > .container > div:last-child {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* ── Static background line: move from center → left, behind icons ── */
+  section:has(.process-card) > .container > div:last-child > div:nth-child(1) {
+    left: calc(1.2rem + 22px) !important;
+    transform: translateX(-1px) !important; /* just offset for 2px width centering, no translateX(-50%) */
+    z-index: 0 !important;
+  }
+
+  /* ── GSAP animated glow line: repositioned to left on mobile ──
+     GSAP matchMedia handles mobile animation (play-once on entry).
+     Do NOT override transform here — GSAP controls scaleY. ── */
+  section:has(.process-card) > .container > div:last-child > div:nth-child(2) {
+    display: block !important;
+    left: calc(1.2rem + 22px) !important;
+    z-index: 1 !important;
+  }
+
+  /* ── Cards wrapper ── */
+  section:has(.process-card) > .container > div:last-child > div:last-child {
+    position: relative !important;
+    z-index: 2 !important;
+    padding: 0 1.2rem !important;
+  }
+
+  /* ── Each step row: flat left-to-right (no zigzag) ── */
+  .process-card {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    gap: 0 !important;
+    margin-bottom: 0 !important;
+    position: relative !important;
+  }
+
+  /* ── Text block ── */
+  .process-card > div:first-child {
+    order: 2 !important;
+    flex: 1 !important;
+    text-align: left !important;
+    padding: 0 0 2.5rem 1.2rem !important;
+  }
+
+  .process-card > div:first-child h3 {
+    font-size: 1.05rem !important;
+    margin-bottom: 0.5rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .process-card > div:first-child h3 span {
+    font-size: 0.85rem !important;
+    margin-right: 6px !important;
+  }
+
+  .process-card > div:first-child p {
+    font-size: 0.85rem !important;
+    line-height: 1.55 !important;
+    color: #a398b0 !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* ── Icon circle ──
+     z-index 4 ensures it sits above both line layers (z-index 0,1)
+     and even above the cards wrapper (z-index 2).
+     Solid #131315 background "punches out" the line behind it. ── */
+  .process-card > div:nth-child(2) {
+    order: 1 !important;
+    flex-shrink: 0 !important;
+    width: 46px !important;
+    height: 46px !important;
+    border-radius: 50% !important;
+    background: #131315 !important;
+    position: relative !important;
+    z-index: 4 !important;
+  }
+
+  /* ── Spacer (desktop-only empty div) ── */
+  .process-card > div:nth-child(3) {
+    display: none !important;
+  }
+
+  /* Last card: no bottom gap */
+  .process-card:last-child > div:first-child {
+    padding-bottom: 0 !important;
+  }
+}
+
+/* ============================================================
+   8. CONTACT SECTION — COMPACT MOBILE LAYOUT
+   Stacks direct-channels + form vertically, trims spacing.
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* Section padding */
+  section#contact {
+    padding: 50px 0 !important;
+  }
+
+  /* Header block */
+  section#contact h2 {
+    font-size: clamp(1.9rem, 9vw, 2.6rem) !important;
+    margin-bottom: 0.6rem !important;
+  }
+
+  section#contact > .container > div > div:first-child {
+    margin-bottom: 2rem !important;
+  }
+
+  section#contact > .container > div > div:first-child p {
+    font-size: 0.95rem !important;
+    padding: 0 0.5rem !important;
+    max-width: 100% !important;
+  }
+
+  /* Glass card: stack columns, tighter padding */
+  .glass[style*="flex"] {
+    flex-direction: column !important;
+    gap: 1.8rem !important;
+    padding: 1.5rem !important;
+    border-radius: 1.2rem !important;
+  }
+
+  /* Direct Channels column */
+  .glass[style*="flex"] > div:first-child {
+    flex: 1 1 auto !important;
+  }
+
+  .glass[style*="flex"] > div:first-child h3 {
+    font-size: 1.25rem !important;
+    margin-bottom: 1.2rem !important;
+  }
+
+  /* Contact item rows (email, location) */
+  .glass[style*="flex"] > div:first-child > div > div {
+    gap: 1rem !important;
+  }
+
+  /* Icon boxes — smaller on mobile */
+  .glass[style*="flex"] > div:first-child > div > div > div:first-child {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    border-radius: 10px !important;
+  }
+
+  .glass[style*="flex"] > div:first-child > div > div > div:first-child svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  /* Contact label text */
+  .glass[style*="flex"] > div:first-child > div > div > div:last-child > div:first-child {
+    font-size: 0.75rem !important;
+  }
+
+  /* Contact value text */
+  .glass[style*="flex"] > div:first-child > div > div > div:last-child > div:last-child {
+    font-size: 1rem !important;
+  }
+
+  /* Gap between email / location items */
+  .glass[style*="flex"] > div:first-child > div[style*="flex-direction: column"] {
+    gap: 1.2rem !important;
+  }
+
+  /* Form column */
+  .glass[style*="flex"] > div:last-child {
+    flex: 1 1 auto !important;
+  }
+
+  /* Force all grid rows to single column */
+  .glass[style*="flex"] > div:last-child form > div[style*="grid"] {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* Form gap */
+  .glass[style*="flex"] > div:last-child form {
+    gap: 1rem !important;
+  }
+
+  /* Inputs, select, textarea — consistent padding */
+  .glass[style*="flex"] > div:last-child input,
+  .glass[style*="flex"] > div:last-child select,
+  .glass[style*="flex"] > div:last-child textarea {
+    padding: 0.9rem 1rem !important;
+    font-size: 0.9rem !important;
+    border-radius: 0.75rem !important;
+  }
+
+  /* Shorter textarea */
+  .glass[style*="flex"] > div:last-child textarea {
+    height: 110px !important;
+  }
+
+  /* Submit button */
+  .glass[style*="flex"] > div:last-child button[type="submit"] {
+    padding: 1rem !important;
+    font-size: 1rem !important;
+    gap: 0.6rem !important;
+  }
+
+  .glass[style*="flex"] > div:last-child button[type="submit"] svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+}
+
+/* ============================================================
+   9. FOOTER — SINGLE LINE ON MOBILE
+   ============================================================ */
+@media (max-width: 768px) {
+  footer > .container {
+    flex-wrap: nowrap !important;
+    gap: 0.5rem !important;
+    align-items: center !important;
+  }
+
+  /* Logo — never shrink, always fully visible */
+  footer > .container > svg,
+  footer > .container > a,
+  footer > .container > div:first-child {
+    flex-shrink: 0 !important;
+  }
+
+  /* Copyright — only this side shrinks */
+  footer > .container > div:last-child {
+    font-size: 0.6rem !important;
+    flex-shrink: 1 !important;
+    min-width: 0 !important;
+    text-align: right !important;
+  }
+}

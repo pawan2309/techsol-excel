@@ -122,8 +122,6 @@ const ServiceCard = ({ service, index, progress, range, targetScale }) => {
   
   // We use the scroll progress to scale down the card as the next ones stack on top
   const scale = useTransform(progress, range, [1, targetScale]);
-  // Instead of making the card transparent, we fade in a black overlay to create depth
-  const overlayOpacity = useTransform(progress, range, [0, 0.7]);
 
   return (
     <div ref={container} className="service-card-wrapper" style={{
@@ -169,6 +167,7 @@ const ServiceCard = ({ service, index, progress, range, targetScale }) => {
           {/* Left: Huge Icon & ID */}
           <div className="service-card-left">
             <motion.div 
+              className="service-icon-box"
               whileHover={{ scale: 1.1, rotate: 5 }}
               style={{
                 width: '160px',
@@ -232,27 +231,17 @@ const ServiceCard = ({ service, index, progress, range, targetScale }) => {
           </div>
         </div>
 
-        {/* Dark Overlay for Depth */}
-        <motion.div 
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: '#000',
-            opacity: overlayOpacity,
-            pointerEvents: 'none',
-            zIndex: 20
-          }}
-        />
       </motion.div>
     </div>
   );
 };
 
-const ExpertiseGrid = () => {
+const ExpertiseGrid = ({ id, compact = false, scrollContainerRef }) => {
   const container = useRef(null);
   
   // Track scroll progress through the entire component
   const { scrollYProgress } = useScroll({
+    ...(scrollContainerRef ? { container: scrollContainerRef } : {}),
     target: container,
     offset: ['start start', 'end end']
   });
@@ -261,9 +250,18 @@ const ExpertiseGrid = () => {
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
   return (
-    <div style={{ background: '#0e0e10', paddingBottom: '20vh' }}>
+    <div id={id} style={{ background: '#0e0e10', paddingBottom: compact ? '8vh' : '20vh' }}>
       {/* Intro Header */}
-      <div style={{ padding: '15vh', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', flexDirection: 'column' }}>
+      <div
+        style={{
+          padding: compact ? '3.5rem 2rem 2.25rem' : '100px 2rem 15vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          flexDirection: 'column'
+        }}
+      >
         <motion.div 
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}

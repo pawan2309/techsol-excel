@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, CheckCircle, Loader2 } from 'lucide-react';
+import Seo from '../components/seo/Seo';
 
 // --- CONFIGURATION ---
 // PASTE YOUR GOOGLE APPS SCRIPT URL HERE
@@ -19,7 +20,13 @@ const ContactPage = () => {
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
 
   useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
     window.scrollTo(0, 0);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
   }, []);
 
   const handleChange = (e) => {
@@ -54,11 +61,17 @@ const ContactPage = () => {
   };
 
   return (
-    <div style={{ background: '#131313', minHeight: '100vh', color: '#e5e2e1', paddingTop: '140px', paddingBottom: '100px' }}>
-      <div className="container">
-        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+    <>
+      <Seo
+        title="Contact Techsol | Start Your Project"
+        description="Contact Techsol for web and app development, cloud modernization, AI automation, pharma systems, and real-time API engineering."
+        path="/contact"
+      />
+      <div style={{ background: '#131313', height: 'calc(100vh - 80px)', marginTop: '80px', color: '#e5e2e1', overflow: 'hidden' }}>
+        <div className="container" style={{ height: '100%', paddingTop: '1.25rem', paddingBottom: '1.25rem' }}>
+          <div style={{ maxWidth: '1100px', margin: '0 auto', height: '100%', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
 
-          <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+          <div style={{ textAlign: 'center', marginBottom: '1.25rem' }}>
             <motion.span
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -67,16 +80,29 @@ const ContactPage = () => {
             >
               Contact Us
             </motion.span>
-            <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>Start Your <span style={{ color: '#00f2ff' }}>Project</span></h1>
-            <p style={{ color: '#b9cacb', fontSize: '1.2rem' }}>Our architects typically respond within 12 hours.</p>
+            <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', marginBottom: '0.5rem' }}>Start Your <span style={{ color: '#00f2ff' }}>Project</span></h1>
+            <p style={{ color: '#b9cacb', fontSize: '1rem' }}>Our architects typically respond within 12 hours.</p>
           </div>
 
-          <div className="glass" style={{ padding: '4rem', borderRadius: '1.5rem', display: 'flex', gap: '4rem', flexWrap: 'wrap', border: '1px solid rgba(0, 242, 255, 0.1)' }}>
+          <div
+            className="glass"
+            style={{
+              flex: 1,
+              minHeight: 0,
+              padding: '1.5rem',
+              borderRadius: '1rem',
+              display: 'flex',
+              gap: '1.5rem',
+              flexWrap: 'wrap',
+              border: '1px solid rgba(0, 242, 255, 0.1)',
+              overflow: 'hidden'
+            }}
+          >
 
             {/* Contact Info Sidebar */}
-            <div style={{ flex: '1 1 300px' }}>
-              <h2 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Direct <span style={{ color: '#7000ff' }}>Channels</span></h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <div style={{ flex: '1 1 280px' }}>
+              <h2 style={{ fontSize: '1.5rem', marginBottom: '1.25rem' }}>Direct <span style={{ color: '#7000ff' }}>Channels</span></h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                   <div style={{ width: '50px', height: '50px', borderRadius: '12px', background: 'rgba(112, 0, 255, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Mail size={24} color="#7000ff" />
@@ -99,14 +125,14 @@ const ContactPage = () => {
             </div>
 
             {/* Main Form */}
-            <div style={{ flex: '2 1 400px' }}>
+            <div style={{ flex: '2 1 420px', minHeight: 0, overflowY: 'auto', paddingRight: '0.25rem' }}>
               <AnimatePresence mode="wait">
                 {status === 'success' ? (
                   <motion.div
                     key="success"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    style={{ textAlign: 'center', padding: '4rem 0' }}
+                    style={{ textAlign: 'center', padding: '2rem 0' }}
                   >
                     <CheckCircle size={64} color="#00f2ff" style={{ marginBottom: '1.5rem' }} />
                     <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Inquiry Received!</h2>
@@ -117,7 +143,7 @@ const ContactPage = () => {
                   <motion.form
                     key="form"
                     onSubmit={handleSubmit}
-                    style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
+                    style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
                   >
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
                       <input
@@ -184,14 +210,14 @@ const ContactPage = () => {
                       value={formData.message}
                       onChange={handleChange}
                       className="glass"
-                      style={{ padding: '1rem', color: 'white', borderRadius: '0.5rem', height: '150px', border: '1px solid rgba(255,255,255,0.05)', resize: 'none' }}
+                      style={{ padding: '1rem', color: 'white', borderRadius: '0.5rem', height: '120px', border: '1px solid rgba(255,255,255,0.05)', resize: 'none' }}
                     ></textarea>
 
                     <button
                       type="submit"
                       disabled={status === 'loading'}
                       className="btn btn-primary"
-                      style={{ justifyContent: 'center', padding: '1.2rem', gap: '0.8rem' }}
+                      style={{ justifyContent: 'center', padding: '0.95rem', gap: '0.8rem' }}
                     >
                       {status === 'loading' ? (
                         <>Processing... <Loader2 className="animate-spin" size={20} /></>
@@ -206,9 +232,10 @@ const ContactPage = () => {
             </div>
 
           </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

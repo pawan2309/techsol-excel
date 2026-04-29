@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useLottie } from 'lottie-react';
 import wgbLoaderData from '../../assets/wgb_loader.json';
@@ -18,9 +18,33 @@ const WgbLottieAnimation = () => {
   return <>{View}</>;
 };
 
-const SplashLoader = ({ onComplete }) => {
-  const [isFinished, setIsFinished] = useState(false);
+const SplashLoader = ({ onComplete, isReady }) => {
   const [isExiting, setIsExiting] = useState(false);
+  const [isFlightDone, setIsFlightDone] = useState(false);
+  const [targetPos, setTargetPos] = useState({ x: 0, y: 0, scale: 0.25 });
+  const logoRef = useRef(null);
+
+  useEffect(() => {
+    if (isExiting && logoRef.current) {
+      const el = document.getElementById('header-logo');
+      if (el) {
+        const startRect = logoRef.current.getBoundingClientRect();
+        const endRect = el.getBoundingClientRect();
+        
+        setTargetPos({
+          x: (endRect.left + endRect.width / 2) - (startRect.left + startRect.width / 2),
+          y: (endRect.top + endRect.height / 2) - (startRect.top + startRect.height / 2),
+          scale: endRect.height / startRect.height
+        });
+      }
+    }
+  }, [isExiting]);
+
+  useEffect(() => {
+    if (isFlightDone && isReady) {
+      onComplete();
+    }
+  }, [isFlightDone, isReady, onComplete]);
 
   // Animation constants for Space Grotesk style (Geometric/Sharp)
   const draw = {
@@ -84,28 +108,28 @@ const SplashLoader = ({ onComplete }) => {
       />
 
       {/* WGB Agency Orbit / Crosshair Lottie Animation (Centered globally) */}
-      <div style={{ position: 'fixed', inset: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1, pointerEvents: 'none', opacity: 0.8, overflow: 'hidden' }}>
+      {/* <div style={{ position: 'fixed', inset: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1, pointerEvents: 'none', opacity: 0.8, overflow: 'hidden' }}>
         <WgbLottieAnimation />
-      </div>
+      </div> */}
 
       <motion.div
-        animate={isExiting ? { scale: 0.25, y: "calc(50px - 50vh)", x: "calc(max(50vw - 600px, 0px) + 111px - 50vw)" } : { scale: 1, y: 0, x: 0 }}
+        animate={isExiting ? { scale: targetPos.scale, y: targetPos.y, x: targetPos.x } : { scale: 1, y: 0, x: 0 }}
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         onAnimationComplete={() => {
-          if (isExiting) onComplete();
+          if (isExiting) setIsFlightDone(true);
         }}
-        style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}
+        style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', transformOrigin: 'center center' }}
       >
 
         {/* TECHSOL Logo & Subtext */}
-        <div style={{ position: 'relative', transform: 'translateY(-60px)' }}>
+        <div ref={logoRef} style={{ position: 'relative' }}>
           <svg
-            width="630"
-            height="180"
+            width="504"
+            height="144"
             viewBox="0 0 630 180"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            style={{ maxWidth: '85vw' }}
+            style={{ maxWidth: '75vw' }}
           >
             {/* --- T --- */}
             <motion.path d="M40 30 H100" stroke="#00f2ff" strokeWidth="8" strokeLinecap="square" variants={draw} custom={0} initial="hidden" animate="visible" />
@@ -154,7 +178,7 @@ const SplashLoader = ({ onComplete }) => {
               style={{
                 fontFamily: "'Inter', sans-serif",
                 fontWeight: 500,
-                fontSize: '21px',
+                fontSize: '26px',
                 letterSpacing: '0.45em',
                 fill: '#cfc2d9',
                 textTransform: 'uppercase',

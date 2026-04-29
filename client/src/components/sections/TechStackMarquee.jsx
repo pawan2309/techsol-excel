@@ -94,26 +94,42 @@ const TechStackMarquee = () => {
             z-index: 10;
             pointer-events: none;
           }
+          .marquee-row-2 {
+            display: none;
+          }
         `}
       </style>
 
       <div className="marquee-fade-left"></div>
       
       {/* Scroll-driven horizontal motion */}
-      <motion.div 
-        className="marquee-container"
-        style={{ x }}
-        drag="x" // allow manual dragging as well!
-        dragConstraints={{ left: -3000, right: 0 }}
-      >
-        {/* Render twice for seamless loop */}
-        {[...technologies, ...technologies].map((tech, index) => (
-          <div key={index} className="tech-badge">
-            {tech.icon}
-            <span style={{ fontSize: '1.1rem', letterSpacing: '0.05em' }}>{tech.name}</span>
-          </div>
-        ))}
-      </motion.div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+        <motion.div 
+          className="marquee-container"
+          style={{ x }}
+        >
+          {/* Row 1: Even items */}
+          {[...technologies, ...technologies].map((tech, index) => (
+            <div key={`r1-${index}`} className="tech-badge">
+              {tech.icon}
+              <span>{tech.name}</span>
+            </div>
+          ))}
+        </motion.div>
+
+        <motion.div 
+          style={{ x: useTransform(scrollYProgress, [0, 1], ["-50%", "0%"]) }}
+          className="marquee-container marquee-row-2"
+        >
+          {/* Row 2: Shifted by 4 items so it shows different content than Row 1 */}
+          {[...technologies.slice(4), ...technologies.slice(0, 4), ...technologies.slice(4), ...technologies.slice(0, 4)].map((tech, index) => (
+            <div key={`r2-${index}`} className="tech-badge">
+              {tech.icon}
+              <span>{tech.name}</span>
+            </div>
+          ))}
+        </motion.div>
+      </div>
 
       <div className="marquee-fade-right"></div>
     </section>

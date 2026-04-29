@@ -38,47 +38,87 @@ const ProcessTimeline = () => {
   const lineRef = useRef(null);
   
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Glow line animation tracing down
-      gsap.fromTo(lineRef.current,
-        { height: '0%' },
-        {
-          height: '100%',
-          ease: 'none',
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top center',
-            end: 'bottom 80%',
-            scrub: true,
-          }
-        }
-      );
+    const mm = gsap.matchMedia();
 
-      // Fade and slide in cards
-      const cards = gsap.utils.toArray('.process-card');
-      cards.forEach((card, index) => {
-        gsap.from(card, {
-          y: 50,
-          opacity: 0,
-          duration: 0.8,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: card,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse'
+    // ── DESKTOP: GSAP scrub (original, untouched) ──
+    mm.add('(min-width: 769px)', () => {
+      const ctx = gsap.context(() => {
+        gsap.fromTo(lineRef.current,
+          { scaleY: 0, transformOrigin: 'top center' },
+          {
+            scaleY: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: 'top center',
+              end: 'bottom 80%',
+              scrub: true,
+            }
+          }
+        );
+        gsap.utils.toArray('.process-card').forEach((card) => {
+          gsap.from(card, {
+            y: 50, opacity: 0, duration: 0.8, ease: 'power3.out',
+            scrollTrigger: { trigger: card, start: 'top 80%', toggleActions: 'play none none reverse' }
+          });
+        });
+      }, containerRef);
+      return () => ctx.revert();
+    });
+
+    // ── MOBILE: native scroll listener — GSAP scrub is unreliable on touch ──
+    mm.add('(max-width: 768px)', () => {
+      const line = lineRef.current;
+      const container = containerRef.current;
+
+      // Force start at 0
+      gsap.set(line, { scaleY: 0, transformOrigin: 'top center' });
+
+      const onScroll = () => {
+        const rect = container.getBoundingClientRect();
+        const viewH = window.innerHeight;
+        // Mirror desktop: start=top center, end=bottom 80%
+        const rawProgress = (viewH / 2 - rect.top) / (rect.height - viewH * 0.2);
+        const progress = Math.max(0, Math.min(1, rawProgress));
+        gsap.set(line, { scaleY: progress });
+      };
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll(); // seed on mount
+
+      // Cards: IntersectionObserver is reliable on mobile
+      const cards = Array.from(document.querySelectorAll('.process-card'));
+      cards.forEach(card => gsap.set(card, { y: 30, opacity: 0 }));
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            gsap.to(entry.target, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' });
+          } else {
+            gsap.set(entry.target, { y: 30, opacity: 0 });
           }
         });
-      });
-    }, containerRef);
-    
-    return () => ctx.revert();
+      }, { threshold: 0.15 });
+
+      cards.forEach(card => io.observe(card));
+
+      return () => {
+        window.removeEventListener('scroll', onScroll);
+        io.disconnect();
+        gsap.set(line, { scaleY: 0 });
+        cards.forEach(card => gsap.set(card, { clearProps: 'all' }));
+      };
+    });
+
+    return () => mm.revert();
   }, []);
+
 
   return (
     <section 
       ref={containerRef} 
       style={{ 
-        padding: '120px 0', 
+        padding: '80px 0', 
         background: '#0a0a0b', 
         position: 'relative',
         zIndex: 2
@@ -110,9 +150,12 @@ const ProcessTimeline = () => {
             position: 'absolute',
             left: '50%',
             top: 0,
+            bottom: 0,
+            height: '100%',
             width: '2px',
             background: 'linear-gradient(to bottom, #00daf3, #dab9ff)',
-            transform: 'translateX(-50%)',
+            transform: 'translateX(-50%) scaleY(0)',
+            transformOrigin: 'top center',
             boxShadow: '0 0 15px rgba(0, 218, 243, 0.5)',
             zIndex: 1
           }}></div>

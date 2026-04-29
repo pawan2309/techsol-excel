@@ -17,14 +17,13 @@ const Footer = () => {
         flexWrap: 'wrap', 
         gap: '1rem' 
       }}>
-        <BrandLogo height="24px" />
+        <BrandLogo height="24px" id="footer-logo" />
         <div style={{ 
           color: '#666', 
           fontSize: '0.75rem', 
-          textTransform: 'lowercase',
           letterSpacing: '0.05em'
         }}>
-          © 2026 techsol digital excellence. all rights reserved.
+          © 2026 Techsol Digital Excellence.<br />All rights reserved.
         </div>
       </div>
     </footer>

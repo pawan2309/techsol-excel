@@ -1,8 +1,9 @@
 import React from 'react';
 
-const BrandLogo = ({ height = '40px', className = '' }) => {
+const BrandLogo = ({ height = '40px', className = '', id = 'header-logo' }) => {
   return (
     <svg
+      id={id}
       height={height}
       viewBox="0 0 630 180"
       fill="none"
