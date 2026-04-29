@@ -98,9 +98,11 @@ const Navbar = () => {
             background: 'transparent', 
             border: 'none', 
             color: 'white', 
-            fontSize: '1.5rem', 
+            fontSize: 'clamp(1.2rem, 5vw, 1.8rem)', 
             cursor: 'pointer',
-            zIndex: 101
+            zIndex: 101,
+            padding: 'clamp(4px, 2vw, 8px)',
+            display: 'none'
           }}
         >
           {isMobileMenuOpen ? '✕' : '☰'}
@@ -125,26 +127,27 @@ const Navbar = () => {
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '2rem',
-              zIndex: 100
+              gap: 'clamp(1rem, 8vw, 2rem)',
+              zIndex: 100,
+              paddingBottom: 'clamp(2rem, 5vh, 4rem)'
             }}
           >
-            <Link to="/" onClick={() => setIsMobileMenuOpen(false)} style={{ fontSize: '2rem', color: isHome ? '#00f2ff' : 'white', textDecoration: 'none' }}>Home</Link>
+            <Link to="/" onClick={() => setIsMobileMenuOpen(false)} style={{ fontSize: 'clamp(1.2rem, 5vw, 2rem)', color: isHome ? '#00f2ff' : 'white', textDecoration: 'none', fontWeight: 500 }}>Home</Link>
             <Link to={isHome ? "#services" : "/#services"} onClick={(e) => {
               setIsMobileMenuOpen(false);
               if (isHome) {
                 e.preventDefault();
                 document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
               }
-            }} style={{ fontSize: '2rem', color: isServices ? '#00f2ff' : 'white', textDecoration: 'none' }}>Services</Link>
-            <Link to="/about" onClick={() => setIsMobileMenuOpen(false)} style={{ fontSize: '2rem', color: isAbout ? '#00f2ff' : 'white', textDecoration: 'none' }}>About</Link>
+            }} style={{ fontSize: 'clamp(1.2rem, 5vw, 2rem)', color: isServices ? '#00f2ff' : 'white', textDecoration: 'none', fontWeight: 500 }}>Services</Link>
+            <Link to="/about" onClick={() => setIsMobileMenuOpen(false)} style={{ fontSize: 'clamp(1.2rem, 5vw, 2rem)', color: isAbout ? '#00f2ff' : 'white', textDecoration: 'none', fontWeight: 500 }}>About</Link>
             <Link to={isHome ? "#contact" : "/#contact"} onClick={(e) => {
               setIsMobileMenuOpen(false);
               if (isHome) {
                 e.preventDefault();
                 document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
               }
-            }} className="btn btn-primary" style={{ fontSize: '1.5rem', padding: '1rem 3rem' }}>Contact</Link>
+            }} className="btn btn-primary" style={{ fontSize: 'clamp(1rem, 4vw, 1.5rem)', padding: 'clamp(0.6rem, 3vw, 1rem) clamp(1.5rem, 6vw, 3rem)', marginTop: 'clamp(0.5rem, 3vw, 1rem)' }}>Contact</Link>
           </motion.div>
         )}
       </AnimatePresence>

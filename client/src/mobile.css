@@ -39,6 +39,56 @@
   .nav-mobile-toggle {
     font-size: 1.2rem !important;
     padding: 5px !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mobile menu overlay optimization for various screen sizes */
+  @media (max-width: 480px) {
+    /* Extra small phones */
+    .nav-mobile-toggle {
+      font-size: 1rem !important;
+      padding: 3px 6px !important;
+    }
+  }
+
+  @media (max-width: 640px) {
+    /* Small phones and tablets */
+    nav {
+      padding: 0.5rem 0 !important;
+    }
+
+    nav svg {
+      height: 24px !important;
+    }
+
+    .nav-mobile-toggle {
+      font-size: 1.1rem !important;
+      padding: 4px !important;
+    }
+  }
+
+  /* Mobile menu overlay styles */
+  motion div[style*="position: fixed"],
+  [style*="position: fixed"][style*="zIndex: 100"] {
+    padding-top: clamp(60px, 12vh, 80px) !important;
+  }
+
+  @media (max-width: 768px) {
+    /* Optimize mobile menu for all small screens */
+    motion div[style*="display: flex"][style*="flexDirection: column"] {
+      gap: clamp(0.8rem, 6vw, 2rem) !important;
+      padding: clamp(1rem, 5vw, 2rem) clamp(1rem, 8vw, 2rem) !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    /* Extra small phone optimization */
+    motion div[style*="display: flex"][style*="flexDirection: column"] {
+      gap: clamp(0.6rem, 4vw, 1rem) !important;
+      padding: clamp(0.8rem, 3vw, 1.5rem) clamp(0.8rem, 4vw, 1rem) !important;
+    }
   }
 
   h1 {

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Database, Server, Hexagon, CloudCog, ShieldCheck, Box, Workflow, MonitorPlay, Cpu } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
 const technologies = [
   { name: 'Distributed Systems', icon: <Hexagon size={24} color="#00daf3" /> },
@@ -24,7 +24,9 @@ const TechStackMarquee = () => {
 
   // Map scroll progress (0 to 1) to horizontal movement (0% to -50%)
   // -50% works because we duplicate the items once, so -50% means it scrolled exactly one full set.
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
+  const xBase = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
+  // Apply spring for smooth interpolation
+  const x = useSpring(xBase, { stiffness: 100, damping: 30, mass: 1 });
 
   return (
     <section 
@@ -64,8 +66,9 @@ const TechStackMarquee = () => {
             white-space: nowrap;
             font-weight: 500;
             color: #cfc2d9;
-            transition: all 0.3s ease;
+            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
             user-select: none;
+            will-change: transform, box-shadow;
           }
           .tech-badge:hover {
             background: rgba(255, 255, 255, 0.08);

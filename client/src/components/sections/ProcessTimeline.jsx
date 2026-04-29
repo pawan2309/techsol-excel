@@ -47,7 +47,7 @@ const ProcessTimeline = () => {
           { scaleY: 0, transformOrigin: 'top center' },
           {
             scaleY: 1,
-            ease: 'none',
+            ease: 'power1.inOut',
             scrollTrigger: {
               trigger: containerRef.current,
               start: 'top center',

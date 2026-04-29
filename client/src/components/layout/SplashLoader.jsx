@@ -95,7 +95,7 @@ const SplashLoader = ({ onComplete, isReady }) => {
           scale: [1, 1.5, 1],
           opacity: [0.1, 0.2, 0.1]
         }}
-        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         style={{
           position: 'absolute',
           width: '600px',

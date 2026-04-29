@@ -26,11 +26,12 @@ const PharmaVisual = () => (
             scale: [0.8, 1, 0.8],
           }}
           transition={{
-            duration: 2 + Math.random() * 2,
+            duration: 3,
             repeat: Infinity,
-            delay: Math.random() * 2,
+            delay: (i % 3) * 0.3,
+            ease: 'easeInOut'
           }}
-          style={{ width: '40px', height: '40px', background: 'rgba(0, 242, 255, 0.1)', border: '1px solid rgba(0, 242, 255, 0.2)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          style={{ width: '40px', height: '40px', background: 'rgba(0, 242, 255, 0.1)', border: '1px solid rgba(0, 242, 255, 0.2)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', willChange: 'opacity, transform' }}
         >
           {i % 3 === 0 ? <CheckCircle size={18} color="#00f2ff" /> : <div style={{ width: '4px', height: '4px', background: '#00f2ff', borderRadius: '50%' }} />}
         </motion.div>
@@ -39,7 +40,7 @@ const PharmaVisual = () => (
     <motion.div
       animate={{ y: [0, -10, 0] }}
       transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-      style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '120px', height: '120px', background: 'rgba(0, 242, 255, 0.05)', borderRadius: '50%', border: '1px solid rgba(0, 242, 255, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(10px)' }}
+      style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '120px', height: '120px', background: 'rgba(0, 242, 255, 0.05)', borderRadius: '50%', border: '1px solid rgba(0, 242, 255, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(10px)', willChange: 'transform' }}
     >
       <Shield size={48} color="#00f2ff" />
     </motion.div>
@@ -58,10 +59,10 @@ const SportsVisual = () => (
             opacity: [0, 1, 0],
           }}
           transition={{
-            duration: 1.5 + Math.random(),
+            duration: 2,
             repeat: Infinity,
             delay: i * 0.4,
-            ease: 'linear',
+            ease: 'easeInOut',
           }}
           style={{
             position: 'absolute',
@@ -76,15 +77,15 @@ const SportsVisual = () => (
       <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', display: 'flex', gap: '1rem' }}>
         <motion.div
           animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          style={{ width: '80px', height: '80px', background: 'rgba(112, 0, 255, 0.1)', border: '1px solid rgba(112, 0, 255, 0.3)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(10px)' }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          style={{ width: '80px', height: '80px', background: 'rgba(112, 0, 255, 0.1)', border: '1px solid rgba(112, 0, 255, 0.3)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(10px)', willChange: 'transform' }}
         >
           <Activity size={32} color="#7000ff" />
         </motion.div>
         <motion.div
           animate={{ scale: [1.1, 1, 1.1] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          style={{ width: '80px', height: '80px', background: 'rgba(112, 0, 255, 0.1)', border: '1px solid rgba(112, 0, 255, 0.3)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(10px)' }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          style={{ width: '80px', height: '80px', background: 'rgba(112, 0, 255, 0.1)', border: '1px solid rgba(112, 0, 255, 0.3)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(10px)', willChange: 'transform' }}
         >
           <Database size={32} color="#7000ff" />
         </motion.div>

@@ -5,11 +5,13 @@
   color: var(--accent);
   background: var(--accent-bg);
   border: 2px solid transparent;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, transform 0.2s ease-out;
   margin-bottom: 24px;
+  will-change: border-color, transform;
 
   &:hover {
     border-color: var(--accent-border);
+    transform: translateZ(0);
   }
   &:focus-visible {
     outline: 2px solid var(--accent);
@@ -125,7 +127,8 @@
     align-items: center;
     gap: 8px;
     text-decoration: none;
-    transition: box-shadow 0.3s;
+    transition: box-shadow 0.3s, transform 0.2s ease-out;
+    will-change: box-shadow, transform;
 
     &:hover {
       box-shadow: var(--shadow);
